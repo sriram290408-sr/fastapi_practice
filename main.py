@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 
-app = FastAPI(docs_url = "/swagger")
+app = FastAPI()
 
 
 @app.get("/test")
