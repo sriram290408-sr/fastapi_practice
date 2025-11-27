@@ -27,7 +27,7 @@ def add_student(student_id: int, name: str, marks: int, db: Session = Depends(co
     db.add(student)
     db.commit()
     db.refresh(student)
-    return student
+    return {"message" : student}
 
 
 @app.get("/marks/check/{student_id}")
@@ -54,7 +54,6 @@ def update_student(student_id: int, name: str, marks: int, db: Session = Depends
         return student
     return {"error": "Student not found"}
 
-
 @app.delete("/marks/delete/{student_id}")
 def delete_student(student_id: int, db: Session = Depends(connect_db)):
     student = db.query(Marks).filter(Marks.student_id == student_id).first()
@@ -77,7 +76,7 @@ def add_coach(coach_id: int, name: str, section: str, subject: str, db: Session 
     db.add(coach)
     db.commit()
     db.refresh(coach)
-    return coach
+    return {"message" : coach}
 
 
 @app.get("/coaches/check/{coach_id}")
@@ -86,7 +85,6 @@ def check_coach(coach_id: int, db: Session = Depends(connect_db)):
     if coach:
         return coach
     return {"error": "Coach not found"}
-
 
 @app.get("/coaches/all")
 def get_all_coaches(db: Session = Depends(connect_db)):
@@ -105,19 +103,11 @@ def update_coach(coach_id: int, name: str, section: str, subject: str, db: Sessi
         return coach
     return {"error": "Coach not found"}
 
-
 @app.delete("/coaches/delete/{coach_id}")
 def delete_coach(coach_id: int, db: Session = Depends(connect_db)):
     coach = db.query(Coaches).filter(Coaches.coach_id == coach_id).first()
     if coach:
         db.delete(coach)
         db.commit()
-        return {"message": f"Coach {coach_id} deleted"}
+        return {"message": "Coach data is deleted"}
     return {"error": "Coach not found"}
-
-
-@app.delete("/coaches/delete_all")
-def delete_all_coaches(db: Session = Depends(connect_db)):
-    db.query(Coaches).delete()
-    db.commit()
-    return {"message": "All coaches deleted"}
